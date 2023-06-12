@@ -4,13 +4,14 @@
 
 directive @upper on FIELD_DEFINITION
 
-"""recipe"""
-type Recipe {
-  id: ID!
-  description: String
-  creationDate: Date!
-  ingredients: [String!]!
+"""user"""
+type Idea {
+  _id: ID!
   title: String!
+  description: String
+  need: String
+  user: String!
+  state: String!
 }
 
 """user"""
@@ -24,21 +25,18 @@ type User {
   technicalColor: String
 }
 
-"""Date custom scalar type"""
-scalar Date
-
 type Query {
   user(email: String!): User!
   users: [User!]!
-  recipe(id: String!): Recipe!
-  recipes(skip: Int! = 0, take: Int! = 25): [Recipe!]!
+  idea(_id: String!): Idea!
+  ideas: [Idea!]!
 }
 
 type Mutation {
   addUser(newUserData: NewUserInput!): User!
   removeUser(email: String!): Boolean!
-  addRecipe(newRecipeData: NewRecipeInput!): Recipe!
-  removeRecipe(id: String!): Boolean!
+  addIdea(newIdeaData: NewIdeaInput!): Idea!
+  removeIdea(_id: String!): Boolean!
 }
 
 input NewUserInput {
@@ -49,13 +47,15 @@ input NewUserInput {
   photoUrl: String!
 }
 
-input NewRecipeInput {
+input NewIdeaInput {
   title: String!
   description: String
-  ingredients: [String!]!
+  need: String
+  user: String!
+  state: String! = "A faire"
 }
 
 type Subscription {
   userAdded: User!
-  recipeAdded: Recipe!
+  ideaAdded: Idea!
 }
